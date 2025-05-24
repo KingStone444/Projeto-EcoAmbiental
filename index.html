@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoAmbiental Caucaia - Educação e Conscientização</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --primary-light: #81c784;
+            --secondary: #ff6f00;
+            --secondary-dark: #e65100;
+            --light: #f5f7f8;
+            --dark: #121212;
+            --text: #333333;
+            --gray: #e0e0e0;
+            --error: #d32f2f;
+            --success: #388e3c;
+            --text-light: #666666;
+            --water: #4fc3f7;
+            --earth: #8d6e63;
+            --air: #80deea;
+            --nature: #66bb6a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+            transition: all 0.3s;
+        }
+
+        header.scrolled {
+            padding: 5px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            font-size: 0.7rem;
+            color: var(--text);
+            display: block;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text);
+            padding: 10px 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 15px;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: calc(100% - 30px);
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: none;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 70px;
+            padding-bottom: 60px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--light), transparent);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.8rem;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        /* Sections */
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            font-size: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Elementos naturais */
+        .leaf-decoration {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .leaf-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 5rem;
+            color: var(--nature);
+            transform: rotate(-20deg);
+        }
+
+        .leaf-2 {
+            bottom: 15%;
+            right: 5%;
+            font-size: 4rem;
+            color: var(--nature);
+            transform: rotate(30deg);
+        }
+
+        /* Advice Form */
+        .advice-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin: 0 auto;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advice-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Map Section */
+        #map {
+            height: 500px;
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1;
+            border: 5px solid white;
+        }
+
+        /* Community Section */
+        .advice-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .advice-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advice-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .advice-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .advice-card img {
+            width: 100%;
+            border-radius: 5px;
+            margin: 15px 0;
+            max-height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .advice-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .category-water {
+            background: var(--water);
+        }
+
+        .category-earth {
+            background: var(--earth);
+        }
+
+        .category-air {
+            background: var(--air);
+        }
+
+        .category-nature {
+            background: var(--nature);
+        }
+
+        .date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .date i {
+            margin-right: 5px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 25px 15px;
+            border-radius: 10px;
+            width: 30%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin: 10px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .stat-item .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Post Cards */
+        .post-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .post-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .post-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .post-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .post-card-content {
+            padding: 20px;
+        }
+
+        .post-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .post-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .post-card .btn-small {
+            margin: 0;
+        }
+
+        /* Useful Info Section */
+        .info-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .info-item {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-item h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-item h4 i {
+            margin-right: 10px;
+        }
+
+        /* Instagram Feed */
+        .instagram-feed {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .instagram-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .instagram-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .instagram-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .instagram-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 15px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .instagram-item:hover .instagram-overlay {
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 0;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 0 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-section p, .footer-section ul {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-section ul li::before {
+            content: '\f105';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .footer-section ul li a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0,0,0,0.3);
+            margin-top: 60px;
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-pattern {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%232e7d32"><path d="M30,10 Q50,5 70,10 T90,30 Q95,50 90,70 T70,90 Q50,95 30,90 T10,70 Q5,50 10,30 T30,10"></path></svg>');
+            background-size: 100px;
+        }
+
+        /* Chatbot */
+        .chatbot-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .chatbot-btn:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 380px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            max-height: 600px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .chatbot-container.show {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .chatbot-header h3 i {
+            margin-right: 10px;
+        }
+
+        .close-chatbot {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-chatbot:hover {
+            transform: rotate(90deg);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .bot-message, .user-message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 18px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: white;
+            color: var(--text);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-top-left-radius: 5px;
+        }
+
+        .bot-message::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            transform: rotate(45deg);
+            z-index: -1;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border-top-right-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--gray);
+            background-color: white;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 25px;
+            outline: none;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .chatbot-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+
+        .chatbot-input button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chatbot-input button:hover {
+            transform: scale(1.1);
+            color: var(--primary-dark);
+        }
+
+        .quick-questions {
+            padding: 15px;
+            border-top: 1px solid var(--gray);
+            background-color: white;
+        }
+
+        .quick-questions p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .quick-question {
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 15px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .quick-question:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #E8F5E9;
+            color: var(--success);
+            border-left: 5px solid var(--success);
+        }
+
+        .alert-error {
+            background-color: #FFEBEE;
+            color: var(--error);
+            border-left: 5px solid var(--error);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 20px;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin: 30px auto;
+            max-width: 800px;
+            display: none;
+        }
+
+        .admin-panel h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .admin-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .admin-toggle:hover {
+            background-color: var(--secondary-dark);
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .stat-item {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                padding: 15px 0;
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li a {
+                padding: 15px;
+                display: block;
+                border-bottom: 1px solid var(--gray);
+            }
+            
+            nav ul li a::after {
+                display: none;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .hero {
+                height: 60vh;
+            }
+            
+            .hero-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .chatbot-container {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+                bottom: 100px;
+            }
+            
+            .chatbot-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                height: 70vh;
+            }
+            
+            .hero-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+            
+            .section {
+                padding: 40px 0;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="mainHeader">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="ecoambiental-logo.png" alt="Logo EcoAmbiental">
+                <div class="logo-text">
+                    <h1>ECO AMBIENTAL</h1>
+                    <span>Caucaia 2025</span>
+                </div>
+            </div>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home" class="active">Início</a></li>
+                    <li><a href="#education">Educação Ambiental</a></li>
+                    <li><a href="#info">Informações Úteis</a></li>
+                    <li><a href="#advice">Peça um Conselho</a></li>
+                    <li><a href="#community">Comunidade</a></li>
+                </ul>
+            </nav>
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h2>Juntos por um Caucaia mais sustentável</h2>
+                <p>Informações, dicas e ações para preservar nosso meio ambiente e construir um futuro melhor para nossa cidade</p>
+                <a href="#advice" class="btn">Peça um Conselho</a>
+                <a href="#education" class="btn btn-outline">Aprenda Mais</a>
+            </div>
+            <i class="fas fa-leaf leaf-decoration leaf-1"></i>
+            <i class="fas fa-seedling leaf-decoration leaf-2"></i>
+        </section>
+
+        <!-- Education Section -->
+        <section class="section" id="education">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Educação Ambiental</h2>
+                    <p>Aprenda sobre práticas sustentáveis e preservação do meio ambiente em Caucaia</p>
+                </div>
+                
+                <div class="post-cards" id="educationPosts">
+                    <!-- Posts serão carregados dinamicamente via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Instagram Feed Section -->
+        <section class="section" id="instagram">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Nosso Instagram</h2>
+                    <p>Acompanhe nossas últimas postagens e campanhas de conscientização</p>
+                </div>
+                
+                <div class="instagram-feed" id="instagramFeed">
+                    <!-- Feed do Instagram será carregado dinamicamente -->
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="https://www.instagram.com/ecoo_ambiental_?igsh=MTN5b3l4NXp1M2ZheQ==" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-instagram"></i> Siga-nos no Instagram
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Useful Info Section -->
+        <section class="section" id="info">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Informações Úteis</h2>
+                    <p>Dados e orientações práticas sobre meio ambiente em Caucaia</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3 style="text-align: center; margin-bottom: 30px; color: var(--primary);">
+                        <i class="fas fa-info-circle"></i> Informações Locais
+                    </h3>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4><i class="fas fa-trash-alt"></i> Coleta Seletiva</h4>
+                            <p>Em Caucaia, a coleta seletiva ocorre às terças e quintas no Centro, quartas na Jurema e sextas no Metrópole. Separe plástico, vidro, metal e papel.</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-tint"></i> Crise Hídrica</h4>
+                            <p>Caucaia enfrenta períodos de seca. Evite desperdício de água e denuncie vazamentos públicos.</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-tree"></i> Áreas Verdes</h4>
+                            <p>Conheça o Parque Botânico e a Área de Proteção Ambiental do Estuário do Rio Cauípe.</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-fire"></i> Queimadas</h4>
+                            <p>Denuncie queimadas irregulares: (85) 99999-9999. Aprenda técnicas agrícolas sustentáveis.</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-recycle"></i> Pontos de Coleta</h4>
+                            <p>Óleo de cozinha: Mercado Público e escolas. Eletrônicos: Secretaria de Meio Ambiente.</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-sun"></i> Energia Solar</h4>
+                            <p>Caucaia tem alto potencial para energia solar. Conheça os incentivos para instalação.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Map Section -->
+                <div style="margin-top: 50px;">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary);">
+                        <i class="fas fa-map-marked-alt"></i> Mapa de Pontos Ambientais em Caucaia
+                    </h3>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advice Section -->
+        <section class="section" id="advice">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Peça um Conselho</h2>
+                    <p>Nossa equipe de especialistas em educação ambiental está pronta para ajudar</p>
+                </div>
+                <div class="advice-form">
+                    <div id="alertBox"></div>
+                    <form id="adviceForm">
+                        <div class="form-group">
+                            <label for="name">Seu Nome</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Seu E-mail</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefone (opcional)</label>
+                            <input type="tel" class="form-control" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="adviceType">Tipo de Ajuda</label>
+                            <select class="form-control" id="adviceType" required>
+                                <option value="">Selecione...</option>
+                                <option value="reciclagem">Reciclagem e Resíduos</option>
+                                <option value="agua">Conservação de Água</option>
+                                <option value="energia">Eficiência Energética</option>
+                                <option value="clima">Mudanças Climáticas</option>
+                                <option value="queimadas">Queimadas e Desmatamento</option>
+                                <option value="outro">Outro Assunto</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="question">Sua Pergunta ou Dúvida</label>
+                            <textarea class="form-control" id="question" rows="3" required placeholder="Descreva com detalhes como podemos ajudar..."></textarea>
+                        </div>
+                        <button type="submit" class="btn">Enviar Pergunta</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section class="section" id="community">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Comunidade EcoAmbiental</h2>
+                    <p>Perguntas e respostas recentes da nossa comunidade</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="number" id="totalQuestions">0</div>
+                        <div>Perguntas Respondidas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number" id="activeExperts">0</div>
+                        <div>Especialistas Ativos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number" id="communityMembers">0</div>
+                        <div>Membros da Comunidade</div>
+                    </div>
+                </div>
+                
+                <div class="advice-cards" id="adviceList">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>Nenhuma pergunta ainda</h3>
+                        <p>Seja o primeiro a fazer uma pergunta sobre educação ambiental em Caucaia</p>
+                        <a href="#advice" class="btn">Peça um Conselho</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chatbot Button -->
+    <div class="chatbot-btn" id="chatbotBtn">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <h3><i class="fas fa-leaf"></i> EcoBot - Assistente Ambiental</h3>
+            <button class="close-chatbot" id="closeChatbot">&times;</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="bot-message">
+                <p>Olá! Sou o EcoBot, seu assistente de educação ambiental em Caucaia. Posso te ajudar com:</p>
+                <ul style="margin-left: 20px; margin-top: 5px;">
+                    <li>Dicas de reciclagem e pontos de coleta</li>
+                    <li>Informações sobre coleta seletiva</li>
+                    <li>Orientações sobre economia de água e energia</li>
+                    <li>Problemas ambientais em Caucaia</li>
+                </ul>
+                <p>Como posso te ajudar hoje?</p>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Digite sua mensagem...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="quick-questions">
+            <p>Perguntas rápidas:</p>
+            <button class="quick-question" data-question="Como separar o lixo em Caucaia?">Reciclagem</button>
+            <button class="quick-question" data-question="Onde descartar óleo em Caucaia?">Descarte de óleo</button>
+            <button class="quick-question" data-question="Como denunciar queimadas?">Queimadas</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Toggle -->
+    <button class="admin-toggle" id="adminToggle">
+        <i class="fas fa-user-shield"></i>
+    </button>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <h2>Painel Administrativo</h2>
+        <div class="alert alert-info" id="adminAlert" style="display: none;"></div>
+        
+        <div class="form-group">
+            <label for="postTitle">Título do Post</label>
+            <input type="text" class="form-control" id="postTitle">
+        </div>
+        
+        <div class="form-group">
+            <label for="postCategory">Categoria</label>
+            <select class="form-control" id="postCategory">
+                <option value="nature">Natureza</option>
+                <option value="water">Água</option>
+                <option value="earth">Solo</option>
+                <option value="air">Ar</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="postImage">URL da Imagem</label>
+            <input type="text" class="form-control" id="postImage" placeholder="Cole a URL da imagem">
+        </div>
+        
+        <div class="form-group">
+            <label for="postContent">Conteúdo</label>
+            <textarea class="form-control" id="postContent" rows="5"></textarea>
+        </div>
+        
+        <button class="btn" id="addPostBtn">Adicionar Post</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p><i class="fas fa-envelope"></i> contato@ecoambiental.org.br</p>
+                <p><i class="fas fa-phone"></i> (85) 98765-4321</p>
+                <p><i class="fas fa-map-marker-alt"></i> Rua da Sustentabilidade, 123 - Centro, Caucaia</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#education">Educação Ambiental</a></li>
+                    <li><a href="#info">Informações Úteis</a></li>
+                    <li><a href="#advice">Peça um Conselho</a></li>
+                    <li><a href="#community">Comunidade</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Redes Sociais</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/ecoo_ambiental_?igsh=MTN5b3l4NXp1M2ZheQ==" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+                <h3 style="margin-top: 20px;">Parceiros</h3>
+                <p>Prefeitura de Caucaia</p>
+                <p>Secretaria de Meio Ambiente</p>
+                <p>Escolas Municipais</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EcoAmbiental Caucaia - Todos os direitos reservados</p>
+        </div>
+        <div class="footer-pattern"></div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize EmailJS (substitua com seu User ID)
+        emailjs.init("kEXTu8AqhP2id8zhU");
+        
+        // Initialize Map (Caucaia coordinates)
+        const map = L.map('map').setView([-3.7327, -38.6616], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Add markers for important environmental locations in Caucaia
+        const markers = [
+            {
+                coords: [-3.7350, -38.6600],
+                title: "Secretaria de Meio Ambiente",
+                content: "<b>Secretaria Municipal de Meio Ambiente</b><br>Av. Central, 100 - Centro<br>Horário: 8h-17h (seg-sex)<br>Telefone: (85) 3342-1234"
+            },
+            {
+                coords: [-3.7300, -38.6630],
+                title: "Centro de Reciclagem",
+                content: "<b>Centro de Triagem de Resíduos</b><br>Rua das Flores, 250 - Jurema<br>Aceita: plástico, vidro, metal, papel<br>Horário: 7h-16h (ter-sab)"
+            },
+            {
+                coords: [-3.7280, -38.6550],
+                title: "Parque Botânico",
+                content: "<b>Parque Botânico de Caucaia</b><br>Área de preservação com trilhas e viveiro<br>Horário: 6h-18h (diariamente)"
+            },
+            {
+                coords: [-3.7400, -38.6700],
+                title: "Ponto de Coleta de Óleo",
+                content: "<b>Posto de Coleta de Óleo Usado</b><br>Mercado Público Municipal<br>Aceita óleo de cozinha em garrafas PET<br>Horário: 8h-17h (seg-sex)"
+            },
+            {
+                coords: [-3.7250, -38.6500],
+                title: "APA Estuário do Rio Cauípe",
+                content: "<b>Área de Proteção Ambiental</b><br>Importante ecossistema manguezal<br>Visitas guiadas disponíveis"
+            }
+        ];
+        
+        markers.forEach(marker => {
+            const m = L.marker(marker.coords).addTo(map);
+            m.bindPopup(marker.content);
+            
+            // Custom icon
+            m.setIcon(
+                L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34]
+                })
+            );
+        });
+        
+        // Sample education posts data
+        const educationPosts = [
+            {
+                id: 1,
+                title: "Como separar o lixo corretamente em Caucaia",
+                image: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Aprenda a separar seus resíduos para facilitar a reciclagem e reduzir o impacto ambiental.",
+                category: "nature",
+                content: `
+                    <h3>Como separar o lixo corretamente em Caucaia</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 10/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>A separação correta do lixo é fundamental para facilitar o processo de reciclagem e reduzir o impacto ambiental em nossa cidade. Em Caucaia, temos um sistema de coleta seletiva que depende da colaboração de todos.</p>
+                        
+                        <h4>1. Lixo orgânico</h4>
+                        <p>Restos de alimentos, cascas de frutas e legumes, borra de café, entre outros. Este material pode ser compostado para virar adubo. Em Caucaia, muitas famílias estão adotando a compostagem doméstica.</p>
+                        
+                        <h4>2. Materiais recicláveis</h4>
+                        <ul>
+                            <li><strong>Papel:</strong> Jornais, revistas, caixas de papelão (limpas)</li>
+                            <li><strong>Plástico:</strong> Garrafas, embalagens, potes (lavados)</li>
+                            <li><strong>Vidro:</strong> Garrafas, potes (sem resíduos)</li>
+                            <li><strong>Metal:</strong> Latas de alumínio, embalagens de aço</li>
+                        </ul>
+                        
+                        <h4>3. Rejeitos</h4>
+                        <p>Itens que não podem ser reciclados como papel higiênico, fraldas descartáveis e absorventes.</p>
+                        
+                        <h4>4. Resíduos perigosos</h4>
+                        <p>Pilhas, baterias, lâmpadas fluorescentes e óleo de cozinha devem ser descartados em pontos de coleta específicos. Em Caucaia, temos postos no Mercado Público e na Secretaria de Meio Ambiente.</p>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "Dicas para economizar água em períodos de seca",
+                image: "https://images.unsplash.com/photo-1551224402-36b5b4ee0e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Pequenas mudanças que fazem grande diferença no consumo de água em sua casa.",
+                category: "water",
+                content: `
+                    <h3>Dicas para economizar água em períodos de seca</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 05/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Caucaia, como muitas cidades do Ceará, enfrenta períodos de seca intensa. A água é um recurso finito e essencial para a vida. Pequenas mudanças em nossos hábitos podem fazer uma grande diferença no consumo:</p>
+                        
+                        <h4>No banheiro</h4>
+                        <ul>
+                            <li>Feche a torneira ao escovar os dentes ou fazer a barba - economia de até 12 litros por minuto</li>
+                            <li>Reduza o tempo no banho - cada minuto a menos economiza até 20 litros</li>
+                            <li>Conserte vazamentos imediatamente - um buraco de 2mm em um cano desperdiça 3.200 litros por dia</li>
+                            <li>Instale redutores de vazão em torneiras e chuveiros</li>
+                        </ul>
+                        
+                        <h4>Na cozinha</h4>
+                        <ul>
+                            <li>Use a máquina de lavar louça somente quando estiver cheia</li>
+                            <li>Lave frutas e vegetais em uma bacia em vez de água corrente</li>
+                            <li>Reutilize a água da lavagem de alimentos para regar plantas</li>
+                            <li>Descongele alimentos na geladeira em vez de usar água corrente</li>
+                        </ul>
+                        
+                        <h4>Área externa</h4>
+                        <ul>
+                            <li>Regue plantas no início da manhã ou final da tarde para reduzir evaporação</li>
+                            <li>Use plantas nativas que necessitam menos água</li>
+                            <li>Varra calçadas em vez de lavar</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "Energia solar em Caucaia: Potencial e Benefícios",
+                image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Como aproveitar o potencial solar da nossa região para gerar energia limpa.",
+                category: "air",
+                content: `
+                    <h3>Energia solar em Caucaia: Potencial e Benefícios</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 15/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Caucaia possui um grande potencial para geração de energia solar devido ao seu clima com alta incidência solar durante todo o ano. Veja como aproveitar:</p>
+                        
+                        <h4>1. Aquecedores solares</h4>
+                        <p>Sistemas simples podem aquecer água para banho, reduzindo em até 30% o consumo de energia elétrica. Em Caucaia, o retorno do investimento ocorre em média em 2 anos.</p>
+                        
+                        <h4>2. Painéis fotovoltaicos</h4>
+                        <p>Podem ser instalados em telhados para gerar eletricidade. Em Caucaia, há incentivos fiscais para instalação, incluindo redução no IPTU para residências com sistemas solares.</p>
+                        
+                        <h4>3. Benefícios ambientais</h4>
+                        <p>A energia solar em Caucaia pode:</p>
+                        <ul>
+                            <li>Reduzir a emissão de gases poluentes</li>
+                            <li>Diminuir a dependência de fontes não renováveis</li>
+                            <li>Reduzir os impactos das termelétricas na região</li>
+                            <li>Gerar empregos locais na instalação e manutenção</li>
+                        </ul>
+                        
+                        <h4>4. Projetos em Caucaia</h4>
+                        <p>Conheça algumas iniciativas locais:</p>
+                        <ul>
+                            <li>Escola Municipal com sistema fotovoltaico</li>
+                            <li>Postos de saúde com aquecimento solar</li>
+                            <li>Programa de incentivo para microgeração</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "Combate às queimadas urbanas em Caucaia",
+                image: "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Como identificar e denunciar queimadas irregulares na nossa cidade.",
+                category: "earth",
+                content: `
+                    <h3>Combate às queimadas urbanas em Caucaia</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 20/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>As queimadas urbanas são um problema recorrente em Caucaia, especialmente nas áreas periféricas. Além de crime ambiental, causam diversos problemas à saúde e ao meio ambiente.</p>
+                        
+                        <h4>Impactos das queimadas</h4>
+                        <ul>
+                            <li>Problemas respiratórios na população</li>
+                            <li>Destruição da fauna e flora local</li>
+                            <li>Empobrecimento do solo</li>
+                            <li>Contribuição para o aquecimento global</li>
+                        </ul>
+                        
+                        <h4>Como denunciar</h4>
+                        <p>Em Caucaia, você pode denunciar queimadas irregulares através dos seguintes canais:</p>
+                        <ul>
+                            <li><strong>Disque Denúncia Ambiental:</strong> (85) 99999-9999</li>
+                            <li><strong>Secretaria de Meio Ambiente:</strong> (85) 3342-1234</li>
+                            <li><strong>Aplicativo Caucaia Sustentável:</strong> Disponível para Android e iOS</li>
+                        </ul>
+                        
+                        <h4>Alternativas à queima</h4>
+                        <p>Para descarte de resíduos vegetais, a Prefeitura oferece:</p>
+                        <ul>
+                            <li>Coleta de galhadas em dias específicos</li>
+                            <li>Ponto de entrega voluntária de resíduos orgânicos</li>
+                            <li>Oficinas de compostagem doméstica</li>
+                        </ul>
+                    </div>
+                `
+            }
+        ];
+        
+        // Sample Instagram posts
+        const instagramPosts = [
+            {
+                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                text: "Campanha de limpeza nas praias de Caucaia - Participe!"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                text: "Dia da Árvore - Plantio de mudas nativas no Parque Botânico"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                text: "Oficina de reciclagem criativa - Transforme seu lixo em arte"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                text: "Denuncie queimadas irregulares - Proteja nosso ar e nossa saúde"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1551224402-36b5b4ee0e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                text: "Dicas para economizar água em casa - Cada gota conta!"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                text: "Energia solar em Caucaia - Conheça os benefícios"
+            }
+        ];
+        
+        // Load education posts
+        function loadEducationPosts() {
+            const container = document.getElementById('educationPosts');
+            container.innerHTML = '';
+            
+            educationPosts.forEach(post => {
+                const categoryClass = `category-${post.category}`;
+                const categoryText = getCategoryText(post.category);
+                
+                const postElement = document.createElement('div');
+                postElement.className = 'post-card';
+                postElement.innerHTML = `
+                    <img src="${post.image}" alt="${post.title}">
+                    <div class="post-card-content">
+                        <div class="category ${categoryClass}">${categoryText}</div>
+                        <h3>${post.title}</h3>
+                        <p>${post.excerpt}</p>
+                        <a href="#post-${post.id}" class="btn btn-small">Ler mais</a>
+                    </div>
+                `;
+                container.appendChild(postElement);
+                
+                // Add full post to the page
+                const fullPost = document.createElement('div');
+                fullPost.className = 'full-post';
+                fullPost.id = `post-${post.id}`;
+                fullPost.style.display = 'none';
+                fullPost.innerHTML = post.content;
+                container.parentNode.insertBefore(fullPost, container.nextSibling);
+            });
+        }
+        
+        // Load Instagram feed
+        function loadInstagramFeed() {
+            const container = document.getElementById('instagramFeed');
+            container.innerHTML = '';
+            
+            instagramPosts.forEach(post => {
+                const item = document.createElement('div');
+                item.className = 'instagram-item';
+                item.innerHTML = `
+                    <img src="${post.image}" alt="Instagram Post">
+                    <div class="instagram-overlay">
+                        <p>${post.text}</p>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+        
+        function getCategoryText(category) {
+            switch(category) {
+                case 'water': return 'Água';
+                case 'earth': return 'Solo';
+                case 'air': return 'Ar';
+                case 'nature': return 'Natureza';
+                default: return 'Geral';
+            }
+        }
+        
+        // Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('show');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('show');
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Hide all full posts first
+                    document.querySelectorAll('.full-post').forEach(post => {
+                        post.style.display = 'none';
+                    });
+                    
+                    // If it's a post link, show that post
+                    if (targetId.startsWith('#post-')) {
+                        targetElement.style.display = 'block';
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Show alert function
+        function showAlert(message, type, element) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            element.innerHTML = '';
+            element.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+        
+        // Handle form submission
+        document.getElementById('adviceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const alertBox = document.getElementById('alertBox');
+            
+            // Get form data
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                adviceType: form.adviceType.options[form.adviceType.selectedIndex].text,
+                question: form.question.value
+            };
+            
+            // Send email using EmailJS (substitua com seus IDs)
+            emailjs.send("service_y9r7o3j", "template_nsyykuv", formData)
+                .then(function(response) {
+                    showAlert('Sua pergunta foi enviada com sucesso! Nossa equipe responderá em até 48h.', 'success', alertBox);
+                    form.reset();
+                    
+                    // Update stats (simulação)
+                    document.getElementById('totalQuestions').textContent = 
+                        parseInt(document.getElementById('totalQuestions').textContent) + 1;
+                    document.getElementById('communityMembers').textContent = 
+                        parseInt(document.getElementById('communityMembers').textContent) + 1;
+                    
+                    // Add to community questions (simulação)
+                    const adviceList = document.getElementById('adviceList');
+                    if (adviceList.querySelector('.empty-state')) {
+                        adviceList.innerHTML = '';
+                    }
+                    
+                    const questionDate = new Date();
+                    const adviceCard = document.createElement('div');
+                    adviceCard.className = 'advice-card';
+                    adviceCard.innerHTML = `
+                        <div class="category">${formData.adviceType}</div>
+                        <h3>${formData.question.substring(0, 50)}...</h3>
+                        <p>Sua pergunta está em análise por nossos especialistas.</p>
+                        <div class="date"><i class="far fa-clock"></i> Enviado em: ${questionDate.toLocaleDateString('pt-BR')}</div>
+                    `;
+                    adviceList.prepend(adviceCard);
+                    
+                }, function(error) {
+                    showAlert('Erro ao enviar pergunta. Por favor, tente novamente mais tarde.', 'error', alertBox);
+                    console.error('EmailJS Error:', error);
+                });
+        });
+        
+        // Chatbot functionality
+        const chatbotBtn = document.getElementById('chatbotBtn');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const closeChatbot = document.getElementById('closeChatbot');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const quickQuestions = document.querySelectorAll('.quick-question');
+        
+        // Toggle chatbot visibility
+        chatbotBtn.addEventListener('click', () => {
+            chatbotContainer.classList.add('show');
+        });
+        
+        closeChatbot.addEventListener('click', () => {
+            chatbotContainer.classList.remove('show');
+        });
+        
+        // Send message function
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (message === '') return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            chatbotInput.value = '';
+            
+            // Bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+        
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${sender}-message`;
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        // Enhanced bot responses with Caucaia-specific information
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Reciclagem
+            if (lowerMessage.includes('reciclagem') || lowerMessage.includes('reciclar') || 
+                lowerMessage.includes('lixo') || lowerMessage.includes('resíduo') || lowerMessage.includes('residuo')) {
+                return `Em Caucaia, a coleta seletiva é realizada em diferentes bairros:
+                <ul>
+                    <li><strong>Centro:</strong> Terças e Quintas</li>
+                    <li><strong>Jurema:</strong> Quartas</li>
+                    <li><strong>Metrópole:</strong> Sextas</li>
+                </ul>
+                <p>Separe os materiais em:</p>
+                <ul>
+                    <li><strong>Plástico:</strong> Garrafas, embalagens (lavadas)</li>
+                    <li><strong>Vidro:</strong> Garrafas, potes (sem resíduos)</li>
+                    <li><strong>Metal:</strong> Latas, arames</li>
+                    <li><strong>Papel:</strong> Jornais, caixas (limpas)</li>
+                </ul>
+                <p>Pontos de entrega voluntária:</p>
+                <ul>
+                    <li>Praça da Matriz (Centro)</li>
+                    <li>Parque Botânico</li>
+                    <li>Secretaria de Meio Ambiente</li>
+                </ul>`;
+            }
+            
+            // Óleo
+            else if (lowerMessage.includes('óleo') || lowerMessage.includes('oleo')) {
+                return `O descarte incorreto de óleo de cozinha polui a água. Em Caucaia, você pode levar o óleo usado para:
+                <ul>
+                    <li><strong>Mercado Público Municipal:</strong> Segunda a Sexta, 8h-17h</li>
+                    <li><strong>Escolas Municipais:</strong> Durante o horário letivo</li>
+                    <li><strong>Posto de Coleta:</strong> Rua São Francisco, 123</li>
+                </ul>
+                <p>Dicas para descarte correto:</p>
+                <ul>
+                    <li>Espere o óleo esfriar</li>
+                    <li>Armazene em garrafas PET bem fechadas</li>
+                    <li>Não misture com outros líquidos</li>
+                </ul>
+                <p>Cada litro de óleo descartado corretamente evita a contaminação de 25.000 litros de água!</p>`;
+            }
+            
+            // Água
+            else if (lowerMessage.includes('água') || lowerMessage.includes('agua') || lowerMessage.includes('seca')) {
+                return `Economizar água é essencial em Caucaia, especialmente durante os períodos de seca. Aqui estão dicas específicas para nossa região:
+                <ul>
+                    <li><strong>Reutilize água da chuva:</strong> Instale cisternas ou baldes para captação</li>
+                    <li><strong>Conserte vazamentos:</strong> Um buraco de 2mm desperdiça 3.200 litros/dia</li>
+                    <li><strong>Plantas nativas:</strong> Opte por espécies como cactos e outras que necessitam menos irrigação</li>
+                    <li><strong>Denuncie desperdícios:</strong> Use o aplicativo Caucaia Sustentável ou ligue para (85) 3342-1234</li>
+                    <li><strong>Horário de irrigação:</strong> Antes das 8h ou após as 17h para reduzir evaporação</li>
+                </ul>
+                <p>Em caso de rodízio no abastecimento, siga as orientações da Cagece.</p>`;
+            }
+            
+            // Energia
+            else if (lowerMessage.includes('energia') || lowerMessage.includes('elétrica') || 
+                     lowerMessage.includes('eletrica') || lowerMessage.includes('luz') || lowerMessage.includes('eletricidade')) {
+                return `Dicas para economizar energia em Caucaia:
+                <ul>
+                    <li><strong>Use lâmpadas LED:</strong> Consomem até 80% menos que as incandescentes</li>
+                    <li><strong>Aproveite a luz natural:</strong> Nossa região tem alta incidência solar</li>
+                    <li><strong>Desligue aparelhos:</strong> Tire da tomada quando não estiver usando</li>
+                    <li><strong>Energia solar:</strong> Caucaia tem ótimo potencial - conheça os incentivos municipais</li>
+                    <li><strong>Ventilação natural:</strong> Posicione móveis para melhor circulação de ar</li>
+                </ul>
+                <p>Projetos em Caucaia:</p>
+                <ul>
+                    <li>Programa de troca de lâmpadas em comunidades carentes</li>
+                    <li>Instalação de painéis solares em prédios públicos</li>
+                </ul>`;
+            }
+            
+            // Queimadas
+            else if (lowerMessage.includes('queimada') || lowerMessage.includes('fogo') || lowerMessage.includes('incêndio') || lowerMessage.includes('incendio')) {
+                return `As queimadas são um problema sério em Caucaia, especialmente nas áreas rurais e de mangue. Como ajudar:
+                <ul>
+                    <li><strong>Denuncie:</strong> Ligue para (85) 99999-9999 ou use o aplicativo Caucaia Sustentável</li>
+                    <li><strong>Alternativas:</strong> Para limpeza de terrenos, prefira capinação ou trituração</li>
+                    <li><strong>Período crítico:</strong> Agosto a novembro - redobre a atenção</li>
+                    <li><strong>Efeitos:</strong> Problemas respiratórios, destruição da fauna e flora, empobrecimento do solo</li>
+                </ul>
+                <p>Queimadas urbanas são crime ambiental (Lei 9.605/98) com multas que podem chegar a R$ 50 milhões.</p>`;
+            }
+            
+            // Clima
+            else if (lowerMessage.includes('clima') || lowerMessage.includes('aquecimento') || 
+                     lowerMessage.includes('temperatura') || lowerMessage.includes('mudanças') || lowerMessage.includes('mudancas')) {
+                return `As mudanças climáticas afetam Caucaia de várias formas:
+                <ul>
+                    <li><strong>Aumento da temperatura:</strong> Média anual subiu 1,5°C nos últimos 30 anos</li>
+                    <li><strong>Alteração nas chuvas:</strong> Períodos mais secos e chuvas mais intensas</li>
+                    <li><strong>Risco de desertificação:</strong> Principalmente na região oeste do município</li>
+                    <li><strong>Elevação do nível do mar:</strong> Ameaça áreas costeiras e manguezais</li>
+                </ul>
+                <p>Você pode ajudar:</p>
+                <ul>
+                    <li>Reduzindo emissões (transporte, energia)</li>
+                    <li>Plantando árvores nativas</li>
+                    <li>Participando de projetos de educação ambiental</li>
+                    <li>Consumindo de forma consciente</li>
+                </ul>`;
+            }
+            
+            // Default
+            else {
+                return `Sou o EcoBot, assistente ambiental de Caucaia. Posso te ajudar com:
+                <ul>
+                    <li>Orientações sobre reciclagem e coleta seletiva</li>
+                    <li>Locais para descarte de resíduos especiais</li>
+                    <li>Dicas de conservação de água e energia</li>
+                    <li>Informações sobre mudanças climáticas</li>
+                    <li>Denúncia de problemas ambientais</li>
+                </ul>
+                <p>Qual sua dúvida específica sobre meio ambiente em Caucaia?</p>`;
+            }
+        }
+        
+        // Event listeners
+        sendMessageBtn.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        quickQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const message = question.getAttribute('data-question');
+                addMessage(message, 'user');
+                chatbotInput.value = '';
+                
+                setTimeout(() => {
+                    const response = getBotResponse(message);
+                    addMessage(response, 'bot');
+                }, 1000);
+            });
+        });
+
+        // Initialize community counters with random growth simulation
+        function simulateGrowth() {
+            let questions = 0;
+            let experts = 3; // Base experts
+            let members = 0;
+
+            const growthInterval = setInterval(() => {
+                questions += Math.floor(Math.random() * 3);
+                members += Math.floor(Math.random() * 5);
+                
+                document.getElementById('totalQuestions').textContent = questions;
+                document.getElementById('activeExperts').textContent = experts;
+                document.getElementById('communityMembers').textContent = members;
+                
+                // Add a new expert every 50 members
+                if (members > 0 && members % 50 === 0) {
+                    experts += 1;
+                }
+                
+                // Stop after reaching reasonable numbers
+                if (questions > 150) {
+                    clearInterval(growthInterval);
+                }
+            }, 3000);
+        }
+
+        // Admin panel functionality
+        const adminToggle = document.getElementById('adminToggle');
+        const adminPanel = document.getElementById('adminPanel');
+        
+        adminToggle.addEventListener('click', () => {
+            adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        document.getElementById('addPostBtn').addEventListener('click', function() {
+            const title = document.getElementById('postTitle').value;
+            const category = document.getElementById('postCategory').value;
+            const image = document.getElementById('postImage').value;
+            const content = document.getElementById('postContent').value;
+            
+            if (!title || !image || !content) {
+                showAlert('Preencha todos os campos obrigatórios', 'error', document.getElementById('adminAlert'));
+                return;
+            }
+            
+            // Create new post object
+            const newPost = {
+                id: educationPosts.length + 1,
+                title: title,
+                image: image,
+                excerpt: content.substring(0, 100) + '...',
+                category: category,
+                content: `
+                    <h3>${title}</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> ${new Date().toLocaleDateString('pt-BR')}</span>
+                        <span><i class="far fa-user"></i> Administrador</span>
+                    </div>
+                    <div class="post-content">
+                        ${content.replace(/\n/g, '<br>')}
+                    </div>
+                `
+            };
+            
+            // Add to posts array
+            educationPosts.unshift(newPost);
+            
+            // Reload posts
+            loadEducationPosts();
+            
+            // Clear form
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postContent').value = '';
+            
+            showAlert('Post adicionado com sucesso!', 'success', document.getElementById('adminAlert'));
+            
+            // Scroll to the new post
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.getElementById('education').offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            }, 500);
+        });
+        
+        // Start simulation after page loads
+        window.addEventListener('load', function() {
+            simulateGrowth();
+            loadEducationPosts();
+            loadInstagramFeed();
+        });
+    </script>
+</body>
+</html>
