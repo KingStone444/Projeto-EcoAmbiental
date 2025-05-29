@@ -80,11 +80,6 @@
             align-items: center;
         }
 
-        .logo img {
-            height: 40px;
-            margin-right: 10px;
-        }
-
         .logo-text h1 {
             font-size: 1.2rem;
             color: var(--primary);
@@ -536,8 +531,8 @@
             margin-bottom: 15px;
         }
 
-        .post-card .btn-small {
-            margin: 0;
+        .post-card .category {
+            margin-bottom: 15px;
         }
 
         /* Useful Info Section */
@@ -636,6 +631,33 @@
 
         .instagram-item:hover .instagram-overlay {
             opacity: 1;
+        }
+
+        .empty-instagram {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .empty-instagram i {
+            font-size: 4rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-instagram h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .empty-instagram p {
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 20px;
         }
 
         /* Footer */
@@ -1037,6 +1059,107 @@
             transform: scale(1.1);
         }
 
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-modal.show {
+            display: flex;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .login-container h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-container .btn {
+            width: 100%;
+        }
+
+        /* Image Upload */
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .image-upload-preview {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed var(--gray);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .image-upload-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .image-upload-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Instagram Post Form */
+        .instagram-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin: 30px auto;
+            max-width: 800px;
+            display: none;
+        }
+
+        .instagram-form h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -1173,7 +1296,6 @@
     <header id="mainHeader">
         <div class="container header-container">
             <div class="logo">
-                <img src="ecoambiental-logo.png" alt="Logo EcoAmbiental">
                 <div class="logo-text">
                     <h1>ECO AMBIENTAL</h1>
                     <span>Caucaia 2025</span>
@@ -1231,7 +1353,11 @@
                 </div>
                 
                 <div class="instagram-feed" id="instagramFeed">
-                    <!-- Feed do Instagram será carregado dinamicamente -->
+                    <div class="empty-instagram">
+                        <i class="fab fa-instagram"></i>
+                        <h3>Nenhuma postagem ainda</h3>
+                        <p>Em breve traremos novidades e campanhas ambientais</p>
+                    </div>
                 </div>
                 
                 <div style="text-align: center; margin-top: 30px;">
@@ -1356,7 +1482,7 @@
                         <div>Perguntas Respondidas</div>
                     </div>
                     <div class="stat-item">
-                        <div class="number" id="activeExperts">0</div>
+                        <div class="number" id="activeExperts">3</div>
                         <div>Especialistas Ativos</div>
                     </div>
                     <div class="stat-item">
@@ -1417,6 +1543,26 @@
         <i class="fas fa-user-shield"></i>
     </button>
 
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <h2>Login Administrativo</h2>
+            <div class="alert alert-error" id="loginAlert" style="display: none;"></div>
+            
+            <div class="form-group">
+                <label for="loginUsername">Usuário</label>
+                <input type="text" class="form-control" id="loginUsername" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">Senha</label>
+                <input type="password" class="form-control" id="loginPassword" required>
+            </div>
+            
+            <button class="btn" id="loginBtn">Entrar</button>
+        </div>
+    </div>
+
     <!-- Admin Panel -->
     <div class="admin-panel" id="adminPanel">
         <h2>Painel Administrativo</h2>
@@ -1437,9 +1583,20 @@
             </select>
         </div>
         
+        <div class="image-upload">
+            <label>Imagem do Post</label>
+            <div class="image-upload-preview" id="imagePreview">
+                <i class="fas fa-image" style="font-size: 3rem; color: var(--gray);"></i>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            <button type="button" class="image-upload-btn" id="uploadBtn">
+                <i class="fas fa-upload"></i> Escolher Imagem
+            </button>
+        </div>
+        
         <div class="form-group">
-            <label for="postImage">URL da Imagem</label>
-            <input type="text" class="form-control" id="postImage" placeholder="Cole a URL da imagem">
+            <label for="postDescription">Descrição da Imagem</label>
+            <input type="text" class="form-control" id="postDescription" placeholder="Descreva a imagem para acessibilidade">
         </div>
         
         <div class="form-group">
@@ -1448,6 +1605,31 @@
         </div>
         
         <button class="btn" id="addPostBtn">Adicionar Post</button>
+        
+        <div class="instagram-form" id="instagramForm">
+            <h2>Adicionar Postagem no Instagram</h2>
+            <div class="alert alert-info" id="instagramAlert" style="display: none;"></div>
+            
+            <div class="image-upload">
+                <label>Imagem para o Instagram</label>
+                <div class="image-upload-preview" id="instagramImagePreview">
+                    <i class="fas fa-image" style="font-size: 3rem; color: var(--gray);"></i>
+                </div>
+                <input type="file" id="instagramImageUpload" accept="image/*" style="display: none;">
+                <button type="button" class="image-upload-btn" id="instagramUploadBtn">
+                    <i class="fas fa-upload"></i> Escolher Imagem
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label for="instagramDescription">Descrição da Postagem</label>
+                <textarea class="form-control" id="instagramDescription" rows="3" placeholder="Digite a legenda para a postagem"></textarea>
+            </div>
+            
+            <button class="btn btn-secondary" id="addInstagramPostBtn">
+                <i class="fab fa-instagram"></i> Adicionar ao Instagram
+            </button>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -1546,14 +1728,15 @@
             );
         });
         
-        // Sample education posts data
-        const educationPosts = [
+        // Sample education posts data with category descriptions
+        let educationPosts = [
             {
                 id: 1,
                 title: "Como separar o lixo corretamente em Caucaia",
                 image: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
                 excerpt: "Aprenda a separar seus resíduos para facilitar a reciclagem e reduzir o impacto ambiental.",
                 category: "nature",
+                categoryDescription: "Preservação da natureza e ecossistemas locais",
                 content: `
                     <h3>Como separar o lixo corretamente em Caucaia</h3>
                     <div class="post-meta">
@@ -1588,6 +1771,7 @@
                 image: "https://images.unsplash.com/photo-1551224402-36b5b4ee0e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
                 excerpt: "Pequenas mudanças que fazem grande diferença no consumo de água em sua casa.",
                 category: "water",
+                categoryDescription: "Conservação e uso sustentável dos recursos hídricos",
                 content: `
                     <h3>Dicas para economizar água em períodos de seca</h3>
                     <div class="post-meta">
@@ -1628,6 +1812,7 @@
                 image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
                 excerpt: "Como aproveitar o potencial solar da nossa região para gerar energia limpa.",
                 category: "air",
+                categoryDescription: "Qualidade do ar e energias renováveis",
                 content: `
                     <h3>Energia solar em Caucaia: Potencial e Benefícios</h3>
                     <div class="post-meta">
@@ -1668,6 +1853,7 @@
                 image: "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
                 excerpt: "Como identificar e denunciar queimadas irregulares na nossa cidade.",
                 category: "earth",
+                categoryDescription: "Proteção do solo e combate à desertificação",
                 content: `
                     <h3>Combate às queimadas urbanas em Caucaia</h3>
                     <div class="post-meta">
@@ -1702,38 +1888,302 @@
                         </ul>
                     </div>
                 `
+            },
+            {
+                id: 5,
+                title: "Guia completo de separação de lixo em Caucaia",
+                image: "https://images.unsplash.com/photo-1587293852726-70cdb56c1936?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Aprenda a separar corretamente cada tipo de resíduo para facilitar a reciclagem em nossa cidade.",
+                category: "nature",
+                categoryDescription: "Preservação da natureza e ecossistemas locais",
+                content: `
+                    <h3>Guia completo de separação de lixo em Caucaia</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 25/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>A separação correta do lixo é o primeiro passo para uma Caucaia mais limpa e sustentável. Veja como fazer:</p>
+                        
+                        <h4>1. Lixo Orgânico</h4>
+                        <p>O que incluir:</p>
+                        <ul>
+                            <li>Restos de alimentos (cascas, sementes, talos)</li>
+                            <li>Borras de café e saquinhos de chá</li>
+                            <li>Cascas de ovos (trituradas)</li>
+                            <li>Folhas secas e grama cortada</li>
+                        </ul>
+                        <p>Dica: Em Caucaia, você pode participar do programa de compostagem comunitária nos bairros Jurema e Metrópole.</p>
+                        
+                        <h4>2. Materiais Recicláveis</h4>
+                        <p>Como preparar:</p>
+                        <ul>
+                            <li><strong>Plástico:</strong> Lave embalagens de alimentos e retire rótulos quando possível</li>
+                            <li><strong>Vidro:</strong> Remova tampas e lave garrafas e potes</li>
+                            <li><strong>Metal:</strong> Amasse latas para ocupar menos espaço</li>
+                            <li><strong>Papel:</strong> Seque bem se estiver molhado e removem clipes/grampos</li>
+                        </ul>
+                        
+                        <h4>3. Resíduos Especiais</h4>
+                        <p>Locais de descarte em Caucaia:</p>
+                        <ul>
+                            <li><strong>Eletrônicos:</strong> Secretaria de Meio Ambiente (Rua da Sustentabilidade, 123)</li>
+                            <li><strong>Lâmpadas:</strong> Lojas de material de construção participantes</li>
+                            <li><strong>Medicamentos:</strong> Farmácias credenciadas</li>
+                            <li><strong>Óleo de cozinha:</strong> Mercado Público e escolas municipais</li>
+                        </ul>
+                        
+                        <h4>4. Rejeitos</h4>
+                        <p>O que fazer com o que não pode ser reciclado:</p>
+                        <ul>
+                            <li>Papel higiênico, fraldas e absorventes devem ir para o lixo comum</li>
+                            <li>Embalagens metalizadas (como de salgadinhos) não são recicláveis em Caucaia</li>
+                            <li>Espelhos e cerâmicas devem ser descartados como rejeito</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "Conscientização sobre o lixo nas praias de Caucaia",
+                image: "https://images.unsplash.com/photo-1551524559-8af4e6624178?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Como o lixo afeta nossas praias e o que podemos fazer para preservá-las.",
+                category: "nature",
+                categoryDescription: "Preservação da natureza e ecossistemas locais",
+                content: `
+                    <h3>Conscientização sobre o lixo nas praias de Caucaia</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 28/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>As praias de Caucaia, como Cumbuco e Icaraí, sofrem com o acúmulo de lixo, especialmente nos períodos de alta temporada. Conheça os impactos e soluções:</p>
+                        
+                        <h4>Principais problemas</h4>
+                        <ul>
+                            <li><strong>Plásticos:</strong> Garrafas, sacolas e canudos são os itens mais encontrados</li>
+                            <li><strong>Bitucas de cigarro:</strong> Uma única bituca pode contaminar 8 litros de água</li>
+                            <li><strong>Redes de pesca abandonadas:</strong> Causam mortandade de tartarugas e golfinhos</li>
+                            <li><strong>Microplásticos:</strong> Partículas pequenas que entram na cadeia alimentar</li>
+                        </ul>
+                        
+                        <h4>Como ajudar</h4>
+                        <ul>
+                            <li>Participe das ações de limpeza de praia organizadas pela Prefeitura</li>
+                            <li>Leve seu lixo de volta ou use as lixeiras disponíveis</li>
+                            <li>Prefira embalagens reutilizáveis quando for à praia</li>
+                            <li>Denuncie descarte irregular pelo app Caucaia Sustentável</li>
+                        </ul>
+                        
+                        <h4>Projetos em Caucaia</h4>
+                        <ul>
+                            <li><strong>Ecopontos na orla:</strong> Pontos de coleta seletiva nas principais praias</li>
+                            <li><strong>Tartarugas do Cumbuco:</strong> Monitoramento e proteção de ninhos</li>
+                            <li><strong>Troca de lixo por desconto:</strong> Leve resíduos recicláveis e ganhe desconto em estabelecimentos parceiros</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: "Mudanças climáticas e seus impactos em Caucaia",
+                image: "https://images.unsplash.com/photo-1615796153287-98eacf0abb13?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Como o aquecimento global está afetando nossa cidade e o que podemos fazer.",
+                category: "air",
+                categoryDescription: "Qualidade do ar e energias renováveis",
+                content: `
+                    <h3>Mudanças climáticas e seus impactos em Caucaia</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 30/05/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Caucaia já sente os efeitos das mudanças climáticas. Entenda os principais impactos:</p>
+                        
+                        <h4>Efeitos locais</h4>
+                        <ul>
+                            <li><strong>Aumento da temperatura:</strong> Média 2°C mais alta que há 30 anos</li>
+                            <li><strong>Alteração no regime de chuvas:</strong> Períodos secos mais longos e chuvas mais intensas</li>
+                            <li><strong>Elevação do nível do mar:</strong> Risco para comunidades costeiras</li>
+                            <li><strong>Desertificação:</strong> Avanço em áreas do sertão caucaiense</li>
+                        </ul>
+                        
+                        <h4>O que a Prefeitura está fazendo</h4>
+                        <ul>
+                            <li>Plano Municipal de Mudanças Climáticas</li>
+                            <li>Reflorestamento de áreas degradadas</li>
+                            <li>Incentivo à energia solar</li>
+                            <li>Projetos de agricultura resiliente</li>
+                        </ul>
+                        
+                        <h4>Como você pode ajudar</h4>
+                        <ul>
+                            <li>Reduza seu consumo de energia e água</li>
+                            <li>Plante árvores nativas em seu bairro</li>
+                            <li>Prefira transporte público ou bicicleta</li>
+                            <li>Participe de ações comunitárias de educação ambiental</li>
+                            <li>Exija políticas públicas sustentáveis</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: "Mapa completo de pontos de coleta em Caucaia",
+                image: "https://images.unsplash.com/photo-1575408264798-b50b252663e6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Todos os locais para descarte correto de resíduos especiais na nossa cidade.",
+                category: "nature",
+                categoryDescription: "Preservação da natureza e ecossistemas locais",
+                content: `
+                    <h3>Mapa completo de pontos de coleta em Caucaia</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 01/06/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Encontre o ponto de coleta mais próximo para cada tipo de material em Caucaia:</p>
+                        
+                        <h4>1. Eletrônicos e eletrodomésticos</h4>
+                        <ul>
+                            <li><strong>Secretaria de Meio Ambiente:</strong> Rua da Sustentabilidade, 123 - Centro (seg-sex, 8h-17h)</li>
+                            <li><strong>Ecoponto Shopping Caucaia:</strong> Piso L1, próximo à escada rolante (ter-dom, 10h-22h)</li>
+                            <li><strong>Feira de Troca Sustentável:</strong> Primeiro sábado do mês, Praça da Matriz</li>
+                        </ul>
+                        
+                        <h4>2. Óleo de cozinha usado</h4>
+                        <ul>
+                            <li><strong>Mercado Público Municipal:</strong> Setor de hortifrúti (seg-sex, 8h-17h)</li>
+                            <li><strong>Escolas Municipais:</strong> 15 unidades com pontos de coleta</li>
+                            <li><strong>Associação de Bairro Jurema:</strong> Rua das Flores, 500 (sábados, 8h-12h)</li>
+                        </ul>
+                        
+                        <h4>3. Pilhas e baterias</h4>
+                        <ul>
+                            <li><strong>Supermercados parceiros:</strong> 12 estabelecimentos em diversos bairros</li>
+                            <li><strong>Farmácias:</strong> Rede municipal de farmácias populares</li>
+                            <li><strong>Postos de saúde:</strong> Unidades básicas de saúde</li>
+                        </ul>
+                        
+                        <h4>4. Lâmpadas fluorescentes</h4>
+                        <ul>
+                            <li><strong>Lojas de material de construção:</strong> 5 estabelecimentos credenciados</li>
+                            <li><strong>Cooperativa de Reciclagem:</strong> Rua do Comércio, 200 - Jurema</li>
+                        </ul>
+                        
+                        <h4>5. Medicamentos vencidos</h4>
+                        <ul>
+                            <li><strong>Farmácias:</strong> 8 farmácias participantes no município</li>
+                            <li><strong>Unidades de Saúde:</strong> Todas as UBS aceitam descarte</li>
+                        </ul>
+                        
+                        <p>Baixe o aplicativo <strong>Caucaia Sustentável</strong> para ter este mapa sempre à mão!</p>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                title: "Energias renováveis vs não renováveis: O que usar em Caucaia?",
+                image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Conheça as opções de energia sustentável disponíveis para nossa região.",
+                category: "air",
+                categoryDescription: "Qualidade do ar e energias renováveis",
+                content: `
+                    <h3>Energias renováveis vs não renováveis: O que usar em Caucaia?</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 05/06/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>Entenda as diferenças e escolhas energéticas para um Caucaia mais sustentável:</p>
+                        
+                        <h4>Energias não renováveis (evitar)</h4>
+                        <ul>
+                            <li><strong>Termelétricas a carvão:</strong> Poluentes e com alto custo ambiental</li>
+                            <li><strong>Diesel geradores:</strong> Usados em emergências, mas muito poluentes</li>
+                            <li><strong>Gás natural:</strong> Menos poluente, mas ainda fóssil</li>
+                        </ul>
+                        
+                        <h4>Energias renováveis (preferir)</h4>
+                        <ul>
+                            <li><strong>Solar:</strong> Caucaia tem alto potencial - 300 dias de sol/ano</li>
+                            <li><strong>Eólica:</strong> Ventos constantes na região costeira</li>
+                            <li><strong>Biomassa:</strong> Uso de resíduos agrícolas da região</li>
+                        </ul>
+                        
+                        <h4>Incentivos em Caucaia</h4>
+                        <ul>
+                            <li><strong>Desconto no IPTU:</strong> Até 10% para residências com energia solar</li>
+                            <li><strong>Financiamento:</strong> Linhas de crédito para sistemas fotovoltaicos</li>
+                            <li><strong>Projetos comunitários:</strong> Energia solar em escolas e postos de saúde</li>
+                        </ul>
+                        
+                        <h4>Como adotar em casa</h4>
+                        <ul>
+                            <li>Comece com aquecedor solar de água</li>
+                            <li>Instale painéis fotovoltaicos gradualmente</li>
+                            <li>Participe de cooperativas de energia</li>
+                            <li>Opte por eletrodomésticos eficientes (selo Procel A)</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                title: "Compostagem doméstica: Transforme seu lixo em adubo",
+                image: "https://images.unsplash.com/photo-1589927986089-35812388d1f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                excerpt: "Aprenda a fazer compostagem em casa e reduza seu lixo orgânico em até 50%.",
+                category: "earth",
+                categoryDescription: "Proteção do solo e combate à desertificação",
+                content: `
+                    <h3>Compostagem doméstica: Transforme seu lixo em adubo</h3>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 10/06/2025</span>
+                        <span><i class="far fa-user"></i> Equipe EcoAmbiental</span>
+                    </div>
+                    <div class="post-content">
+                        <p>A compostagem é uma solução simples para reduzir o lixo orgânico que vai para os aterros de Caucaia. Veja como começar:</p>
+                        
+                        <h4>O que pode ser compostado</h4>
+                        <ul>
+                            <li>Cascas de frutas e legumes</li>
+                            <li>Borras de café e filtros de papel</li>
+                            <li>Cascas de ovos (trituradas)</li>
+                            <li>Folhas secas e grama cortada</li>
+                            <li>Jornais picados (sem cores)</li>
+                        </ul>
+                        
+                        <h4>O que evitar</h4>
+                        <ul>
+                            <li>Carnes e laticínios (atraem animais)</li>
+                            <li>Gorduras e óleos</li>
+                            <li>Fezes de animais domésticos</li>
+                            <li>Plantas doentes</li>
+                        </ul>
+                        
+                        <h4>Métodos para Caucaia</h4>
+                        <ul>
+                            <li><strong>Composteira de baldes:</strong> Ideal para apartamentos</li>
+                            <li><strong>Vermicompostagem:</strong> Com minhocas californianas</li>
+                            <li><strong>Composteira de quintal:</strong> Para quem tem espaço</li>
+                        </ul>
+                        
+                        <h4>Onde conseguir ajuda</h4>
+                        <ul>
+                            <li><strong>Oficinas gratuitas:</strong> Secretaria de Meio Ambiente oferece cursos mensais</li>
+                            <li><strong>Kits de compostagem:</strong> Disponíveis com desconto para moradores</li>
+                            <li><strong>Comunidades de compostagem:</strong> Grupos de troca de experiências</li>
+                        </ul>
+                        
+                        <p>Uma família em Caucaia pode reduzir em até 50% seu lixo doméstico com a compostagem!</p>
+                    </div>
+                `
             }
         ];
         
-        // Sample Instagram posts
-        const instagramPosts = [
-            {
-                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-                text: "Campanha de limpeza nas praias de Caucaia - Participe!"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-                text: "Dia da Árvore - Plantio de mudas nativas no Parque Botânico"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-                text: "Oficina de reciclagem criativa - Transforme seu lixo em arte"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1516054575922-f0b8eeadec1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-                text: "Denuncie queimadas irregulares - Proteja nosso ar e nossa saúde"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1551224402-36b5b4ee0e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-                text: "Dicas para economizar água em casa - Cada gota conta!"
-            },
-            {
-                image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-                text: "Energia solar em Caucaia - Conheça os benefícios"
-            }
-        ];
+        // Instagram posts (empty array to be filled by admin)
+        let instagramPosts = [];
         
-        // Load education posts
+        // Load education posts with category descriptions
         function loadEducationPosts() {
             const container = document.getElementById('educationPosts');
             container.innerHTML = '';
@@ -1745,12 +2195,12 @@
                 const postElement = document.createElement('div');
                 postElement.className = 'post-card';
                 postElement.innerHTML = `
-                    <img src="${post.image}" alt="${post.title}">
+                    <img src="${post.image}" alt="${post.title}" onerror="this.src='https://via.placeholder.com/300x200?text=EcoAmbiental'">
                     <div class="post-card-content">
                         <div class="category ${categoryClass}">${categoryText}</div>
+                        <p class="category-description"><small>${post.categoryDescription}</small></p>
                         <h3>${post.title}</h3>
                         <p>${post.excerpt}</p>
-                        <a href="#post-${post.id}" class="btn btn-small">Ler mais</a>
                     </div>
                 `;
                 container.appendChild(postElement);
@@ -1765,16 +2215,27 @@
             });
         }
         
-        // Load Instagram feed
+        // Load Instagram feed with error handling for images
         function loadInstagramFeed() {
             const container = document.getElementById('instagramFeed');
             container.innerHTML = '';
+            
+            if (instagramPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-instagram">
+                        <i class="fab fa-instagram"></i>
+                        <h3>Nenhuma postagem ainda</h3>
+                        <p>Em breve traremos novidades e campanhas ambientais</p>
+                    </div>
+                `;
+                return;
+            }
             
             instagramPosts.forEach(post => {
                 const item = document.createElement('div');
                 item.className = 'instagram-item';
                 item.innerHTML = `
-                    <img src="${post.image}" alt="Instagram Post">
+                    <img src="${post.image}" alt="Instagram Post" onerror="this.src='https://via.placeholder.com/300x300?text=EcoAmbiental'">
                     <div class="instagram-overlay">
                         <p>${post.text}</p>
                     </div>
@@ -1886,13 +2347,13 @@
                     showAlert('Sua pergunta foi enviada com sucesso! Nossa equipe responderá em até 48h.', 'success', alertBox);
                     form.reset();
                     
-                    // Update stats (simulação)
+                    // Update stats only when a real question is submitted
                     document.getElementById('totalQuestions').textContent = 
                         parseInt(document.getElementById('totalQuestions').textContent) + 1;
                     document.getElementById('communityMembers').textContent = 
                         parseInt(document.getElementById('communityMembers').textContent) + 1;
                     
-                    // Add to community questions (simulação)
+                    // Add to community questions
                     const adviceList = document.getElementById('adviceList');
                     if (adviceList.querySelector('.empty-state')) {
                         adviceList.innerHTML = '';
@@ -2098,47 +2559,109 @@
             });
         });
 
-        // Initialize community counters with random growth simulation
-        function simulateGrowth() {
-            let questions = 0;
-            let experts = 3; // Base experts
-            let members = 0;
-
-            const growthInterval = setInterval(() => {
-                questions += Math.floor(Math.random() * 3);
-                members += Math.floor(Math.random() * 5);
-                
-                document.getElementById('totalQuestions').textContent = questions;
-                document.getElementById('activeExperts').textContent = experts;
-                document.getElementById('communityMembers').textContent = members;
-                
-                // Add a new expert every 50 members
-                if (members > 0 && members % 50 === 0) {
-                    experts += 1;
-                }
-                
-                // Stop after reaching reasonable numbers
-                if (questions > 150) {
-                    clearInterval(growthInterval);
-                }
-            }, 3000);
-        }
-
         // Admin panel functionality
         const adminToggle = document.getElementById('adminToggle');
         const adminPanel = document.getElementById('adminPanel');
+        const loginModal = document.getElementById('loginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginAlert = document.getElementById('loginAlert');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        const imagePreview = document.getElementById('imagePreview');
+        const instagramForm = document.getElementById('instagramForm');
+        const instagramImageUpload = document.getElementById('instagramImageUpload');
+        const instagramImagePreview = document.getElementById('instagramImagePreview');
+        const instagramUploadBtn = document.getElementById('instagramUploadBtn');
+        const addInstagramPostBtn = document.getElementById('addInstagramPostBtn');
         
+        // Credenciais do administrador (em um sistema real, isso seria no backend)
+        const ADMIN_CREDENTIALS = {
+            username: "admin",
+            password: "eco2025"
+        };
+        
+        let isAdminLoggedIn = false;
+        
+        // Toggle admin panel visibility
         adminToggle.addEventListener('click', () => {
-            adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
+            if (!isAdminLoggedIn) {
+                loginModal.classList.add('show');
+            } else {
+                adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
+                instagramForm.style.display = 'none';
+            }
         });
         
+        // Handle login
+        loginBtn.addEventListener('click', function() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                isAdminLoggedIn = true;
+                loginModal.classList.remove('show');
+                adminPanel.style.display = 'block';
+                showAlert('Login realizado com sucesso!', 'success', document.getElementById('adminAlert'));
+            } else {
+                showAlert('Usuário ou senha incorretos', 'error', loginAlert);
+            }
+        });
+        
+        // Handle image upload for posts
+        uploadBtn.addEventListener('click', () => {
+            imageUpload.click();
+        });
+        
+        imageUpload.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização">`;
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Handle image upload for instagram
+        instagramUploadBtn.addEventListener('click', () => {
+            instagramImageUpload.click();
+        });
+        
+        instagramImageUpload.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    instagramImagePreview.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização">`;
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Toggle instagram form
+        document.getElementById('instagramFormToggle').addEventListener('click', function() {
+            instagramForm.style.display = instagramForm.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // Add new post
         document.getElementById('addPostBtn').addEventListener('click', function() {
+            if (!isAdminLoggedIn) {
+                showAlert('Você precisa estar logado para adicionar posts', 'error', document.getElementById('adminAlert'));
+                return;
+            }
+            
             const title = document.getElementById('postTitle').value;
             const category = document.getElementById('postCategory').value;
-            const image = document.getElementById('postImage').value;
+            const description = document.getElementById('postDescription').value;
             const content = document.getElementById('postContent').value;
+            const imageFile = imageUpload.files[0];
             
-            if (!title || !image || !content) {
+            if (!title || !content) {
                 showAlert('Preencha todos os campos obrigatórios', 'error', document.getElementById('adminAlert'));
                 return;
             }
@@ -2147,9 +2670,10 @@
             const newPost = {
                 id: educationPosts.length + 1,
                 title: title,
-                image: image,
+                image: imageFile ? URL.createObjectURL(imageFile) : 'https://via.placeholder.com/300x200?text=EcoAmbiental',
                 excerpt: content.substring(0, 100) + '...',
                 category: category,
+                categoryDescription: getCategoryDescription(category),
                 content: `
                     <h3>${title}</h3>
                     <div class="post-meta">
@@ -2170,8 +2694,10 @@
             
             // Clear form
             document.getElementById('postTitle').value = '';
-            document.getElementById('postImage').value = '';
+            document.getElementById('postDescription').value = '';
             document.getElementById('postContent').value = '';
+            imageUpload.value = '';
+            imagePreview.innerHTML = '<i class="fas fa-image" style="font-size: 3rem; color: var(--gray);"></i>';
             
             showAlert('Post adicionado com sucesso!', 'success', document.getElementById('adminAlert'));
             
@@ -2184,11 +2710,63 @@
             }, 500);
         });
         
-        // Start simulation after page loads
+        // Add new instagram post
+        addInstagramPostBtn.addEventListener('click', function() {
+            if (!isAdminLoggedIn) {
+                showAlert('Você precisa estar logado para adicionar posts', 'error', document.getElementById('instagramAlert'));
+                return;
+            }
+            
+            const description = document.getElementById('instagramDescription').value;
+            const imageFile = instagramImageUpload.files[0];
+            
+            if (!imageFile) {
+                showAlert('Selecione uma imagem para a postagem', 'error', document.getElementById('instagramAlert'));
+                return;
+            }
+            
+            // Create new instagram post
+            const newPost = {
+                image: URL.createObjectURL(imageFile),
+                text: description || "Nova postagem EcoAmbiental"
+            };
+            
+            // Add to instagram posts array
+            instagramPosts.unshift(newPost);
+            
+            // Reload instagram feed
+            loadInstagramFeed();
+            
+            // Clear form
+            document.getElementById('instagramDescription').value = '';
+            instagramImageUpload.value = '';
+            instagramImagePreview.innerHTML = '<i class="fas fa-image" style="font-size: 3rem; color: var(--gray);"></i>';
+            
+            showAlert('Postagem do Instagram adicionada com sucesso!', 'success', document.getElementById('instagramAlert'));
+        });
+        
+        function getCategoryDescription(category) {
+            switch(category) {
+                case 'water': return 'Conservação e uso sustentável dos recursos hídricos';
+                case 'earth': return 'Proteção do solo e combate à desertificação';
+                case 'air': return 'Qualidade do ar e energias renováveis';
+                case 'nature': return 'Preservação da natureza e ecossistemas locais';
+                default: return 'Educação ambiental geral';
+            }
+        }
+        
+        // Start the page
         window.addEventListener('load', function() {
-            simulateGrowth();
             loadEducationPosts();
             loadInstagramFeed();
+            
+            // Add toggle button for instagram form
+            const instagramToggleBtn = document.createElement('button');
+            instagramToggleBtn.className = 'btn btn-secondary';
+            instagramToggleBtn.id = 'instagramFormToggle';
+            instagramToggleBtn.innerHTML = '<i class="fab fa-instagram"></i> Adicionar Postagem no Instagram';
+            instagramToggleBtn.style.marginTop = '20px';
+            adminPanel.insertBefore(instagramToggleBtn, instagramForm);
         });
     </script>
 </body>
